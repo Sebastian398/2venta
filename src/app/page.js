@@ -1,103 +1,185 @@
+"use client";
+
+import Link from "next/link";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faTags } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      setIsAuthenticated(!!user);
+    }
+  }, []);
+
+  const handleComprarClick = () => {
+    if (isAuthenticated) {
+      router.push("/products");
+    } else {
+      alert("Primero debes iniciar sesión");
+    }
+  };
+
+  const handlePublicarClick = () => {
+    if (isAuthenticated) {
+      router.push("/publish");
+    } else {
+      alert("Primero debes iniciar sesión");
+    }
+  };
+
+  return (
+    <>
+      {/* Hero Section */}
+      <section
+        className="h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 md:px-8 text-white shadow-2xl mb-10"
+        style={{ backgroundImage: "url('/ropa3.jpg')" }}
+      >
+        <div className="bg-black bg-opacity-75 p-6 md:p-10 rounded-xl max-w-2xl text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">SegundaMano</h1>
+          <p className="text-base md:text-lg mb-6">
+            ¿Qué esperas para comprar esos que siempre has querido?
+            <br />
+            <br />
+            En SegundaMano, encuentra productos usados en excelente estado, al mejor precio, y vendedores confiables cerca de ti.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      {/* Servicios */}
+      <section id="servicios" className="px-4 md:px-10">
+        <div className="mx-auto max-w-screen-md rounded-t-lg border-x-2 border-x-teal-600 border-t-2 border-t-teal-600 text-4xl text-center">
+          <h1 className="text-teal-500 font-bold">Servicios</h1>
+        </div>
+        <div className="flex flex-col md:flex-row justify-center items-center md:mx-20 lg:mx-60 my-10 gap-10">
+          {/* Card 1 */}
+          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
+            <Image
+              src="/ropa5.jpg"
+              alt="Imagen"
+              className="mt-10 mx-auto rounded-full"
+              width={200}
+              height={200}
+            />
+            <div className="p-4 text-center">
+              <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
+                Compra artículos
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Descubre productos usados, desde electrónica hasta muebles, revisados y listos para ti.
+              </p>
+              <button
+                onClick={handleComprarClick}
+                className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
+              >
+                Comprar
+              </button>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
+            <Image
+              src="/ropa2.jpg"
+              alt="Imagen"
+              className="mt-10 mx-auto rounded-full"
+              width={200}
+              height={200}
+            />
+            <div className="p-4 text-center">
+              <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
+                Vende tus productos
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Publica tus artículos usados de forma sencilla y llega a compradores interesados.
+              </p>
+              <button
+                onClick={handlePublicarClick}
+                className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
+              >
+                Publicar
+              </button>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
+            <Image
+              src="/garantia.jpg"
+              alt="Imagen"
+              className="mt-10 mx-auto rounded-full"
+              width={200}
+              height={200}
+            />
+            <div className="p-4 text-center">
+              <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
+                Garantía y soporte
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Te ofrecemos seguridad y asistencia para que comprar y vender sea confiable y sencillo.
+              </p>
+              <Link
+                href="/"
+                className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
+              >
+                Soporte
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Acerca de nosotros */}
+      <section className="flex justify-center items-center text-black px-4 my-20">
+        <div className="shadow-lg max-w-4xl w-full rounded-2xl bg-white p-6 md:p-10 border-2 border-teal-400">
+          <div className="flex flex-col md:flex-row items-center gap-4 justify-center">
+            <div className="w-12 p-2 rounded-full bg-teal-500 flex items-center justify-center">
+              <FontAwesomeIcon icon={faTags} className="fa-fw text-white" width={30} height={30} />
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold">Acerca de nosotros</h1>
+          </div>
+          <div className="mt-4 text-center md:text-left">
+            <p>
+              Nuestra página está diseñada para apoyar a los usuarios en la compra y
+              venta de productos usados, facilitando transacciones seguras y acceso a
+              una comunidad confiable.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contacto */}
+      <section className="px-4">
+        <div className="max-w-screen-xl mx-auto mb-20 flex flex-wrap justify-center gap-10 text-black px-6 py-8">
+          <div className="bg-white max-w-xs w-full py-6 rounded-2xl shadow-lg border-2 border-teal-400 px-6">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-11 h-11 flex items-center justify-center rounded-full bg-teal-500">
+                <FontAwesomeIcon icon={faEnvelope} className="text-white" width={30} height={30} />
+              </div>
+            </div>
+            <h1 className="font-bold text-xl text-center mb-3">Información de contacto</h1>
+            <p className="text-center text-sm">
+              📧 Correo electrónico: atencion@SegundaMano.com
+              <br />
+              <br />
+              🌐 Sitio web: www.SegundaMano.com
+              <br />
+              <br />
+              🕒 Horario de atención:
+              <br />
+              Lunes a Viernes: 8:00 a.m. – 5:00 p.m.
+              <br />
+              Sábados: 9:00 a.m. – 1:00 p.m.
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
