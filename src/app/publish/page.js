@@ -26,6 +26,13 @@ function PublicarProducto() {
     "Transferencia bancaria",
   ];
 
+  const metodosEnvioDisponibles = [
+    "Recoger en tienda",
+    "Envío estándar",
+    "Envío urgente",
+    "Envío internacional",
+  ];
+
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -33,6 +40,7 @@ function PublicarProducto() {
     cantidad: "",
     imagen: "",
     metodosPago: [],
+    metodosEnvio: [],
   });
 
   const [mensaje, setMensaje] = useState("");
@@ -78,6 +86,16 @@ function PublicarProducto() {
     setFormData({ ...formData, metodosPago: nuevosMetodos });
   };
 
+  const toggleMetodoEnvio = (metodo) => {
+    let nuevosMetodos;
+    if (formData.metodosEnvio.includes(metodo)) {
+      nuevosMetodos = formData.metodosEnvio.filter((m) => m !== metodo);
+    } else {
+      nuevosMetodos = [...formData.metodosEnvio, metodo];
+    }
+    setFormData({ ...formData, metodosEnvio: nuevosMetodos });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -86,10 +104,11 @@ function PublicarProducto() {
       !formData.precio ||
       !formData.imagen ||
       !formData.cantidad ||
-      formData.metodosPago.length === 0
+      formData.metodosPago.length === 0 ||
+      formData.metodosEnvio.length === 0
     ) {
       setMensaje(
-        "Completa nombre, precio, cantidad, añade una imagen y selecciona al menos un método de pago."
+        "Completa nombre, precio, cantidad, añade una imagen y selecciona al menos un método de pago y un método de envío."
       );
       return;
     }
@@ -105,6 +124,7 @@ function PublicarProducto() {
       cantidad: parseInt(formData.cantidad, 10),
       imagen: formData.imagen,
       metodosPago: formData.metodosPago,
+      metodosEnvio: formData.metodosEnvio,
     };
 
     productosGuardados.push(nuevoProducto);
@@ -118,6 +138,7 @@ function PublicarProducto() {
       cantidad: "",
       imagen: "",
       metodosPago: [],
+      metodosEnvio: [],
     });
     setVistaPrevia("");
   };
@@ -231,6 +252,38 @@ function PublicarProducto() {
                         value={metodo}
                         checked={seleccionado}
                         onChange={() => toggleMetodoPago(metodo)}
+                        className="hidden"
+                      />
+                      {metodo}
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            {/* Métodos de envío */}
+            <fieldset className="border border-gray-300 rounded p-4">
+              <legend className="font-semibold mb-2 text-gray-700">
+                Métodos de envío que ofreces *
+              </legend>
+              <div className="flex flex-wrap gap-3">
+                {metodosEnvioDisponibles.map((metodo) => {
+                  const seleccionado = formData.metodosEnvio.includes(metodo);
+                  return (
+                    <label
+                      key={metodo}
+                      className={`cursor-pointer select-none rounded border px-4 py-2 ${
+                        seleccionado
+                          ? "bg-green-600 border-green-600 text-white"
+                          : "bg-white border-gray-300 text-gray-800 hover:bg-green-100"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        name="metodosEnvio"
+                        value={metodo}
+                        checked={seleccionado}
+                        onChange={() => toggleMetodoEnvio(metodo)}
                         className="hidden"
                       />
                       {metodo}
