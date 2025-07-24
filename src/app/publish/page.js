@@ -2,8 +2,23 @@
 
 import { useState, useEffect } from "react";
 import Card from "../../components/card1";
+import Validation from "../../components/validation";
 
-export default function PublicarProducto() {
+export default function PublicarProductoWrapper() {
+  const [usuarioValidado, setUsuarioValidado] = useState(false);
+
+  const manejarValidacionExitosa = () => {
+    setUsuarioValidado(true);
+  };
+
+  return usuarioValidado ? (
+    <PublicarProducto />
+  ) : (
+    <Validation onValid={manejarValidacionExitosa} />
+  );
+}
+
+function PublicarProducto() {
   const metodosDisponibles = [
     "Efectivo",
     "Tarjeta de crédito/débito",
@@ -117,9 +132,7 @@ export default function PublicarProducto() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Nombre */}
             <label className="block">
-              <span className="font-semibold text-gray-700 mb-1">
-                Nombre del producto *
-              </span>
+              <span className="font-semibold text-gray-700 mb-1">Nombre del producto *</span>
               <input
                 type="text"
                 name="nombre"

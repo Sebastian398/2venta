@@ -8,11 +8,10 @@ import { useRouter } from "next/navigation";
 export default function Productos() {
   const [productos, setProductos] = useState([]);
   const [usuarioActivo, setUsuarioActivo] = useState(null);
-  const [expandidos, setExpandidos] = useState({}); // Para controlar descripciones expandidas
-  const [mostrarVerMas, setMostrarVerMas] = useState({}); // Para mostrar botón Ver más por producto
+  const [expandidos, setExpandidos] = useState({}); 
+  const [mostrarVerMas, setMostrarVerMas] = useState({}); 
   const router = useRouter();
 
-  // refs para cada descripción, con objeto { id: ref }
   const descripcionRefs = useRef({});
 
   useEffect(() => {
@@ -32,14 +31,13 @@ export default function Productos() {
   }, []);
 
   useEffect(() => {
-    // Luego de renderizar productos comprobamos si la descripción supera la altura de 4 líneas
     const nuevosMostrarVerMas = {};
 
     Object.entries(descripcionRefs.current).forEach(([id, ref]) => {
       if (ref) {
         const lineHeight = parseFloat(getComputedStyle(ref).lineHeight);
-        const maxHeight = lineHeight * 4; // Altura de 4 líneas
-        nuevosMostrarVerMas[id] = ref.scrollHeight > maxHeight + 1; // +1 para evitar errores pequeños
+        const maxHeight = lineHeight * 4; 
+        nuevosMostrarVerMas[id] = ref.scrollHeight > maxHeight + 1; 
       }
     });
 
@@ -72,7 +70,6 @@ export default function Productos() {
     }));
   };
 
-  // CSS para limitar la descripcion a 4 líneas con ellipsis
   const descripcionRestriccion = {
     display: "-webkit-box",
     WebkitLineClamp: 4,
@@ -83,12 +80,11 @@ export default function Productos() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8">Productos publicados</h1>
 
       {productos.length === 0 ? (
         <Card>
           <div className="p-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">No hay productos publicados</h2>
+            <h2 className="text-xl text-black font-semibold mb-2">No hay productos publicados</h2>
             <p className="text-gray-600">Cuando algún usuario publique un producto, aparecerá aquí.</p>
           </div>
         </Card>
@@ -100,7 +96,7 @@ export default function Productos() {
             const mostrarBoton = mostrarVerMas[id] || false;
 
             return (
-              <Card key={id} className="w-full max-w-sm"> {/* max-w fijo para tarjetas uniforme */}
+              <Card key={id} className="w-full max-w-sm">
                 <div className="flex flex-col items-center p-4">
                   {imagen ? (
                     <div className="w-48 h-48 mb-4 rounded-lg overflow-hidden flex-shrink-0">

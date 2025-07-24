@@ -1,5 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/context/AuthContext";
