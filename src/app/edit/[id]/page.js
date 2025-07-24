@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Card from "../../components/card1";
+import { useParams, useRouter } from "next/navigation";
+import Card from "../../../components/card1";
 
-export default function PublicarProducto() {
+export default function EditProductPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id;
+
   const metodosDisponibles = [
     "Efectivo",
     "Tarjeta de crédito/débito",
@@ -20,22 +25,49 @@ export default function PublicarProducto() {
     metodosPago: [],
   });
 
-  const [mensaje, setMensaje] = useState("");
   const [vistaPrevia, setVistaPrevia] = useState("");
+  const [mensaje, setMensaje] = useState("");
   const [usuarioActivo, setUsuarioActivo] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && id) {
+      const productosGuardados = JSON.parse(localStorage.getItem("productos")) || [];
+      const producto = productosGuardados.find((p) => p.id === Number(id));
+
       const userStr = localStorage.getItem("user");
+      let user = null;
       if (userStr) {
         try {
-          setUsuarioActivo(JSON.parse(userStr));
+          user = JSON.parse(userStr);
+          setUsuarioActivo(user);
         } catch {
+          user = null;
           setUsuarioActivo(null);
         }
       }
+
+      if (!producto) {
+        setMensaje("Producto no encontrado.");
+        return;
+      }
+
+      // Verificar que el usuario activo sea el creador del producto
+      if (!user || user.email !== producto.creador) {
+        setMensaje("No tienes permiso para editar este producto.");
+        return;
+      }
+
+      setFormData({
+        nombre: producto.nombre || "",
+        descripcion: producto.descripcion || "",
+        precio: producto.precio?.toString() || "",
+        cantidad: producto.cantidad?.toString() || "",
+        imagen: producto.imagen || "",
+        metodosPago: producto.metodosPago || [],
+      });
+      setVistaPrevia(producto.imagen || "");
     }
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -80,10 +112,19 @@ export default function PublicarProducto() {
     }
 
     const productosGuardados = JSON.parse(localStorage.getItem("productos")) || [];
+    const index = productosGuardados.findIndex((p) => p.id === Number(id));
+    if (index === -1) {
+      setMensaje("Producto no encontrado.");
+      return;
+    }
 
-    const nuevoProducto = {
-      id: Date.now(),
-      creador: usuarioActivo ? usuarioActivo.email : null,
+    if (!usuarioActivo || usuarioActivo.email !== productosGuardados[index].creador) {
+      setMensaje("No tienes permiso para editar este producto.");
+      return;
+    }
+
+    productosGuardados[index] = {
+      ...productosGuardados[index],
       nombre: formData.nombre,
       descripcion: formData.descripcion,
       precio: parseFloat(formData.precio),
@@ -92,34 +133,41 @@ export default function PublicarProducto() {
       metodosPago: formData.metodosPago,
     };
 
-    productosGuardados.push(nuevoProducto);
     localStorage.setItem("productos", JSON.stringify(productosGuardados));
+    setMensaje("Producto editado exitosamente.");
 
-    setMensaje("¡Producto publicado exitosamente!");
-    setFormData({
-      nombre: "",
-      descripcion: "",
-      precio: "",
-      cantidad: "",
-      imagen: "",
-      metodosPago: [],
-    });
-    setVistaPrevia("");
+    setTimeout(() => {
+      router.push("/products");
+    }, 1500);
   };
+
+  if (mensaje === "No tienes permiso para editar este producto." || mensaje === "Producto no encontrado.") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card>
+          <div className="max-w-md w-full p-6 text-center">
+            <h2 className="text-xl font-semibold text-red-600">{mensaje}</h2>
+            <button
+              onClick={() => router.push("/products")}
+              className="mt-4 bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded"
+            >
+              Volver a Productos
+            </button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <Card>
         <div className="max-w-md w-full">
-          <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
-            Publicar nuevo producto
-          </h2>
+          <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">Editar producto</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Nombre */}
             <label className="block">
-              <span className="font-semibold text-gray-700 mb-1">
-                Nombre del producto *
-              </span>
+              <span className="font-semibold text-gray-700 mb-1">Nombre del producto *</span>
               <input
                 type="text"
                 name="nombre"
@@ -127,7 +175,6 @@ export default function PublicarProducto() {
                 onChange={handleChange}
                 required
                 className="w-full border rounded px-3 py-2 text-black"
-                placeholder="Ejemplo: Bicicleta usada"
               />
             </label>
 
@@ -140,7 +187,6 @@ export default function PublicarProducto() {
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2 text-black"
                 rows={2}
-                placeholder="Detalles importantes del producto (opcional)"
               />
             </label>
 
@@ -156,7 +202,6 @@ export default function PublicarProducto() {
                 min={0}
                 step="0.01"
                 className="w-full border rounded px-3 py-2 text-black"
-                placeholder="Ejemplo: 120000"
               />
             </label>
 
@@ -172,7 +217,6 @@ export default function PublicarProducto() {
                 min={1}
                 step="1"
                 className="w-full border rounded px-3 py-2 text-black"
-                placeholder="Ejemplo: 3"
               />
             </label>
 
@@ -183,7 +227,6 @@ export default function PublicarProducto() {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                required
                 className="block mt-1 text-black bg-white border border-gray-300 rounded px-3 py-2"
               />
               {vistaPrevia && (
@@ -197,9 +240,7 @@ export default function PublicarProducto() {
 
             {/* Métodos de pago */}
             <fieldset className="border border-gray-300 rounded p-4">
-              <legend className="font-semibold mb-2 text-gray-700">
-                Métodos de pago que aceptas *
-              </legend>
+              <legend className="font-semibold mb-2 text-gray-700">Métodos de pago que aceptas *</legend>
               <div className="flex flex-wrap gap-3">
                 {metodosDisponibles.map((metodo) => {
                   const seleccionado = formData.metodosPago.includes(metodo);
@@ -235,7 +276,7 @@ export default function PublicarProducto() {
               type="submit"
               className="w-full bg-blue-700 hover:bg-blue-800 text-white rounded py-2 font-semibold transition"
             >
-              Publicar producto
+              Guardar cambios
             </button>
           </form>
         </div>

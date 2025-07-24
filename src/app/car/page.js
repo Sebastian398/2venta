@@ -52,7 +52,7 @@ export default function Carrito() {
   const vaciarCarrito = () => {
     localStorage.removeItem("carrito");
     setProductos([]);
-    router.push("/productos");
+    router.push("/products");
   };
 
   return (
