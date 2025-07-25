@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Card from "./card1"; // Asegúrate de que la ruta a tu componente Card sea correcta
+import Card from "./card1"; // Ajusta la ruta si es necesario
 
 export default function Validation({ onValid }) {
   const [formData, setFormData] = useState({
@@ -49,15 +49,40 @@ export default function Validation({ onValid }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSendEmail = (e) => {
+  const handleSendEmail = async (e) => {
     e.preventDefault();
     if (validarCampos()) {
-      // Simular envío de email
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString(); // Código de 6 dígitos
-      setCodigoConfirmacion(generatedCode);
-      setEmailEnviado(true);
-      setMensajeConfirmacion(`Código de confirmación enviado a ${formData.email}. (Simulado: ${generatedCode})`);
-      // En un entorno real, aquí harías una llamada a tu API para enviar el email
+      try {
+        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString(); // Código de 6 dígitos
+
+        const res = await fetch("/api/email", { // <-- ruta corregida, sin 'src/pages'
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: formData.email, codigo: generatedCode }),
+        });
+
+        // Para manejar respuesta que no sea JSON válido (p.e., HTML de error)
+        let data;
+        const text = await res.text();
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = null;
+        }
+
+        if (!res.ok) {
+          throw new Error(data?.error || text || "Error enviando el correo");
+        }
+
+        setCodigoConfirmacion(generatedCode);
+        setEmailEnviado(true);
+        setMensajeConfirmacion(`Código de confirmación enviado a ${formData.email}. Revisa tu correo.`);
+      } catch (error) {
+        setMensajeConfirmacion(`No fue posible enviar el correo: ${error.message}`);
+        console.error(error);
+      }
     }
   };
 
@@ -65,9 +90,8 @@ export default function Validation({ onValid }) {
     e.preventDefault();
     if (codigoIngresado === codigoConfirmacion) {
       setMensajeConfirmacion("¡Email confirmado! Validando identidad...");
-      // En un entorno real, aquí harías la validación final con el backend
       setTimeout(() => {
-        onValid(formData.email); // Pasa el email del usuario al componente principal si es necesario
+        onValid(formData.email); // Pasar email al padre si se usa
       }, 1000);
     } else {
       setMensajeConfirmacion("Código incorrecto. Inténtelo de nuevo.");
@@ -78,9 +102,9 @@ export default function Validation({ onValid }) {
     <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4"
       style={{
-        backgroundColor: "rgba(255, 255, 255, 0.7)", // Fondo blanco con opacidad
-        backdropFilter: "blur(5px)", // Efecto de desenfoque
-        WebkitBackdropFilter: "blur(5px)", // Para compatibilidad con Safari
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
+        backdropFilter: "blur(5px)",
+        WebkitBackdropFilter: "blur(5px)",
       }}
     >
       <Card className="max-w-md w-full p-6">
@@ -184,6 +208,10 @@ export default function Validation({ onValid }) {
             >
               Enviar código de confirmación
             </button>
+
+            {mensajeConfirmacion && (
+              <p className="mt-2 text-center text-red-600 font-semibold">{mensajeConfirmacion}</p>
+            )}
           </form>
         ) : (
           <form onSubmit={handleConfirmCode} className="space-y-4">
@@ -207,7 +235,11 @@ export default function Validation({ onValid }) {
             </button>
             <button
               type="button"
-              onClick={() => setEmailEnviado(false)}
+              onClick={() => {
+                setEmailEnviado(false);
+                setMensajeConfirmacion("");
+                setCodigoIngresado("");
+              }}
               className="w-full bg-gray-500 hover:bg-gray-600 text-white rounded py-2 font-semibold transition mt-2"
             >
               Reingresar datos
