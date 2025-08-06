@@ -92,17 +92,14 @@ export default function Validation({ onValid }) {
     e.preventDefault();
 
     if (codigoIngresado === codigoConfirmacion) {
-      // Revisa si email ya fue confirmado
       const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
       const userIndex = usuarios.findIndex((u) => u.email === formData.email);
 
       if (userIndex !== -1 && usuarios[userIndex].emailConfirmado) {
-        // Ya confirmado, redirige a login
         router.push("/login");
         return;
       }
 
-      // Si no fue confirmado, marca como confirmado
       if (userIndex !== -1) {
         usuarios[userIndex].emailConfirmado = true;
       } else {
