@@ -55,6 +55,17 @@ export default function Carrito() {
     router.push("/products");
   };
 
+  const handleComprar = () => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      if (user) {
+        router.push("/bill");
+      } else {
+        router.push("/register");
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-teal-500">Carrito de compras</h1>
@@ -130,7 +141,7 @@ export default function Carrito() {
               Vaciar
             </button>
             <button
-              onClick={() => router.push("/bill")}
+              onClick={handleComprar}
               className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded font-semibold transition w-1/2"
             >
               Comprar

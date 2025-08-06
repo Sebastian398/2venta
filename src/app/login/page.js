@@ -53,7 +53,7 @@ export default function Login() {
               placeholder="ejemplo@correo.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </label>
@@ -68,7 +68,7 @@ export default function Login() {
               placeholder="********"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </label>

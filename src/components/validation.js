@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Card from "./card1"; // Ajusta la ruta si es necesario
+import { useRouter } from "next/navigation";
+import Card from "./card1";
 
 export default function Validation({ onValid }) {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ export default function Validation({ onValid }) {
   const [codigoConfirmacion, setCodigoConfirmacion] = useState("");
   const [codigoIngresado, setCodigoIngresado] = useState("");
   const [mensajeConfirmacion, setMensajeConfirmacion] = useState("");
+
+  const router = useRouter();
 
   const validarCampos = () => {
     let errs = {};
@@ -53,9 +56,9 @@ export default function Validation({ onValid }) {
     e.preventDefault();
     if (validarCampos()) {
       try {
-        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString(); // Código de 6 dígitos
+        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const res = await fetch("/api/email", { // <-- ruta corregida, sin 'src/pages'
+        const res = await fetch("/api/email", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -63,7 +66,6 @@ export default function Validation({ onValid }) {
           body: JSON.stringify({ email: formData.email, codigo: generatedCode }),
         });
 
-        // Para manejar respuesta que no sea JSON válido (p.e., HTML de error)
         let data;
         const text = await res.text();
         try {
@@ -88,10 +90,29 @@ export default function Validation({ onValid }) {
 
   const handleConfirmCode = (e) => {
     e.preventDefault();
+
     if (codigoIngresado === codigoConfirmacion) {
+      // Revisa si email ya fue confirmado
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      const userIndex = usuarios.findIndex((u) => u.email === formData.email);
+
+      if (userIndex !== -1 && usuarios[userIndex].emailConfirmado) {
+        // Ya confirmado, redirige a login
+        router.push("/login");
+        return;
+      }
+
+      // Si no fue confirmado, marca como confirmado
+      if (userIndex !== -1) {
+        usuarios[userIndex].emailConfirmado = true;
+      } else {
+        usuarios.push({ ...formData, emailConfirmado: true });
+      }
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
       setMensajeConfirmacion("¡Email confirmado! Validando identidad...");
       setTimeout(() => {
-        onValid(formData.email); // Pasar email al padre si se usa
+        onValid(formData.email);
       }, 1000);
     } else {
       setMensajeConfirmacion("Código incorrecto. Inténtelo de nuevo.");
@@ -112,7 +133,7 @@ export default function Validation({ onValid }) {
           Validación de identidad necesaria
         </h2>
         <p className="mb-4 text-center text-gray-700">
-          Para publicar un producto, confirma tu identidad ingresando tus datos y verificando tu email.
+          Para publicar o comprar un producto, confirma tu identidad ingresando tus datos y verificando tu email.
         </p>
 
         {!emailEnviado ? (

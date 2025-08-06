@@ -18,19 +18,11 @@ export default function Home() {
     }
   }, []);
 
-  const handleComprarClick = () => {
-    if (isAuthenticated) {
-      router.push("/products");
-    } else {
-      alert("Primero debes iniciar sesión");
-    }
-  };
-
   const handlePublicarClick = () => {
     if (isAuthenticated) {
       router.push("/publish");
     } else {
-      alert("Primero debes iniciar sesión");
+      router.push("/register");
     }
   };
 
@@ -58,6 +50,7 @@ export default function Home() {
           <h1 className="text-teal-500 font-bold">Servicios</h1>
         </div>
         <div className="flex flex-col md:flex-row justify-center items-center md:mx-20 lg:mx-60 my-10 gap-10">
+
           {/* Card 1 */}
           <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
             <Image
@@ -74,12 +67,13 @@ export default function Home() {
               <p className="text-gray-600 mb-4">
                 Descubre productos usados, desde electrónica hasta muebles, revisados y listos para ti.
               </p>
-              <button
-                onClick={handleComprarClick}
+              {/* Usar Link directo, ya no es necesario validar */}
+              <Link
+                href="/products"
                 className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
               >
                 Comprar
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -99,6 +93,7 @@ export default function Home() {
               <p className="text-gray-600 mb-4">
                 Publica tus artículos usados de forma sencilla y llega a compradores interesados.
               </p>
+              {/* Botón para publicar, sólo redirige a registro si no está autenticado */}
               <button
                 onClick={handlePublicarClick}
                 className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
@@ -132,6 +127,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
+
         </div>
       </section>
 
