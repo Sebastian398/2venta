@@ -36,10 +36,10 @@ export default function Home() {
         <div className="bg-black bg-opacity-75 p-6 md:p-10 rounded-xl max-w-2xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">SegundaMano</h1>
           <p className="text-base md:text-lg mb-6">
-            ¿Qué esperas para comprar esos que siempre has querido?
+            ¿Qué esperas para comprar eso que siempre has querido?
             <br />
             <br />
-            En SegundaMano, encuentra productos usados en excelente estado, al mejor precio, y vendedores confiables cerca de ti.
+            En 2venta, encuentra productos usados en excelente estado, al mejor precio, y vendedores confiables cerca de ti.
           </p>
         </div>
       </section>
@@ -67,7 +67,6 @@ export default function Home() {
               <p className="text-gray-600 mb-4">
                 Descubre productos usados, desde electrónica hasta muebles, revisados y listos para ti.
               </p>
-              {/* Usar Link directo, ya no es necesario validar */}
               <Link
                 href="/products"
                 className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
@@ -93,7 +92,6 @@ export default function Home() {
               <p className="text-gray-600 mb-4">
                 Publica tus artículos usados de forma sencilla y llega a compradores interesados.
               </p>
-              {/* Botón para publicar, sólo redirige a registro si no está autenticado */}
               <button
                 onClick={handlePublicarClick}
                 className="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition"
