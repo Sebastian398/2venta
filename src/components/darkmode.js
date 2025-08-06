@@ -1,4 +1,4 @@
-/* "use client";
+"use client";
 
 import { useState, useEffect } from "react";
 
@@ -48,4 +48,4 @@ export default function DarkModeToggle() {
       {darkMode ? "Desactivar modo oscuro" : "Activar modo oscuro"}
     </button>
   );
-} */
+}
