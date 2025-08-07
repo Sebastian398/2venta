@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Importa useRouter
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Poppins, Russo_One } from "next/font/google";
 
 const poppins = Poppins({
@@ -55,11 +56,19 @@ export default function Navbar() {
     >
       <Link
         href="/"
-        className="text-3xl sm:text-4xl font-bold tracking-wide text-teal-300"
-        style={{ fontFamily: "var(--font-russo-one)" }}
+        className="flex items-center"
         onClick={handleLinkClick}
+        aria-label="Ir a la página principal"
       >
-        2Venta
+        <Image
+          src="/logo.png"
+          alt="Logo SegundaMano"
+          width={100}           
+          height={96}
+          priority={true}      
+          quality={100}       
+          style={{ objectFit: "contain" }}
+        />
       </Link>
 
       <button
@@ -104,7 +113,6 @@ export default function Navbar() {
           Comprar
         </Link>
 
-        {/* Aquí reemplazamos el Link por botón controlado */}
         <button
           onClick={handlePublishClick}
           className="block px-6 py-3 text-center hover:text-teal-300 transition bg-transparent border-none cursor-pointer"
