@@ -6,6 +6,8 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import Card from "@/components/card1";
+import "./globals.css";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,6 +28,9 @@ export default function Home() {
     }
   };
 
+  // Tamaño fijo para las imágenes
+  const imageSize = 200;
+
   return (
     <>
       {/* Hero Section */}
@@ -34,12 +39,12 @@ export default function Home() {
         style={{ backgroundImage: "url('/ropa3.jpg')" }}
       >
         <div className="bg-black bg-opacity-75 p-6 md:p-10 rounded-xl max-w-2xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">SegundaMano</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">2Venta</h1>
           <p className="text-base md:text-lg mb-6">
             ¿Qué esperas para comprar eso que siempre has querido?
             <br />
             <br />
-            En 2venta, encuentra productos usados en excelente estado, al mejor precio, y vendedores confiables cerca de ti.
+            En 2venta, encuentra productos de segunda en excelente estado, al mejor precio, y vendedores confiables cerca de ti.
           </p>
         </div>
       </section>
@@ -50,16 +55,18 @@ export default function Home() {
           <h1 className="text-teal-500 font-bold">Servicios</h1>
         </div>
         <div className="flex flex-col md:flex-row justify-center items-center md:mx-20 lg:mx-60 my-10 gap-10">
-
           {/* Card 1 */}
-          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
-            <Image
-              src="/ropa5.jpg"
-              alt="Imagen"
-              className="mt-10 mx-auto rounded-full"
-              width={200}
-              height={200}
-            />
+          <Card>
+            <div className="w-[140px] h-[140px] mx-auto overflow-hidden rounded-full">
+              <Image
+                src="/ropa5.jpg"
+                alt="Imagen"
+                width={imageSize}
+                height={imageSize}
+                className="object-cover w-full h-full"
+                priority
+              />
+            </div>
             <div className="p-4 text-center">
               <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
                 Compra artículos
@@ -74,17 +81,20 @@ export default function Home() {
                 Comprar
               </Link>
             </div>
-          </div>
+          </Card>
 
           {/* Card 2 */}
-          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
-            <Image
-              src="/ropa2.jpg"
-              alt="Imagen"
-              className="mt-10 mx-auto rounded-full"
-              width={200}
-              height={200}
-            />
+          <Card>
+            <div className="w-[140px] h-[140px] mx-auto overflow-hidden rounded-full">
+              <Image
+                src="/ropa8.jpg"
+                alt="Imagen"
+                width={imageSize}
+                height={imageSize}
+                className="object-cover w-full h-full"
+                priority
+              />
+            </div>
             <div className="p-4 text-center">
               <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
                 Vende tus productos
@@ -99,17 +109,20 @@ export default function Home() {
                 Publicar
               </button>
             </div>
-          </div>
+          </Card>
 
           {/* Card 3 */}
-          <div className="max-w-xs w-full bg-white rounded-2xl shadow-lg border-2 border-teal-400 overflow-hidden">
-            <Image
-              src="/garantia.jpg"
-              alt="Imagen"
-              className="mt-10 mx-auto rounded-full"
-              width={200}
-              height={200}
-            />
+          <Card>
+            <div className="w-[140px] h-[140px] mx-auto overflow-hidden rounded-full">
+              <Image
+                src="/garantia.jpg"
+                alt="Imagen"
+                width={imageSize}
+                height={imageSize}
+                className="object-cover w-full h-full"
+                priority
+              />
+            </div>
             <div className="p-4 text-center">
               <h2 className="text-xl font-semibold text-black mb-2 flex justify-center items-center gap-2">
                 Garantía y soporte
@@ -124,8 +137,7 @@ export default function Home() {
                 Soporte
               </Link>
             </div>
-          </div>
-
+          </Card>
         </div>
       </section>
 
@@ -151,7 +163,7 @@ export default function Home() {
       {/* Contacto */}
       <section className="px-4">
         <div className="max-w-screen-xl mx-auto mb-20 flex flex-wrap justify-center gap-10 text-black px-6 py-8">
-          <div className="bg-white max-w-xs w-full py-6 rounded-2xl shadow-lg border-2 border-teal-400 px-6">
+          <Card>
             <div className="flex items-center justify-center mb-4">
               <div className="w-11 h-11 flex items-center justify-center rounded-full bg-teal-500">
                 <FontAwesomeIcon icon={faEnvelope} className="text-white" width={30} height={30} />
@@ -159,10 +171,10 @@ export default function Home() {
             </div>
             <h1 className="font-bold text-xl text-center mb-3">Información de contacto</h1>
             <p className="text-center text-sm">
-              📧 Correo electrónico: atencion@SegundaMano.com
+              📧 Correo electrónico: atencion@2Venta.com
               <br />
               <br />
-              🌐 Sitio web: www.SegundaMano.com
+              🌐 Sitio web: www.2Venta.com
               <br />
               <br />
               🕒 Horario de atención:
@@ -170,8 +182,8 @@ export default function Home() {
               Lunes a Viernes: 8:00 a.m. – 5:00 p.m.
               <br />
               Sábados: 9:00 a.m. – 1:00 p.m.
-            </p>
-          </div>
+            </p><br/>
+          </Card>
         </div>
       </section>
     </>

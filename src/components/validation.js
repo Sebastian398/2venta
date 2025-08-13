@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Card from "./card1";
+import Card from "./card";
 
 export default function Validation({ onValid }) {
   const [formData, setFormData] = useState({

@@ -1,52 +1,37 @@
-/*"use client";
+"use client";
 
-import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function DarkModeToggle() {
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, setTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
+  // Evitar renderizado antes de montaje para que SSR y cliente coincidan
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const modo = localStorage.getItem("darkMode");
-      if (modo === "true") {
-        setDarkMode(true);
-        document.documentElement.classList.add("dark");
-      } else {
-        setDarkMode(false);
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    setMounted(true);
   }, []);
 
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => {
-      const nuevoModo = !prev;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("darkMode", nuevoModo.toString());
-        if (nuevoModo) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      }
-      return nuevoModo;
-    });
-  };
+  if (!mounted) return null;
+
+  // Determina el tema actual efectivo, considerando modo sistema
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
     <button
-      onClick={toggleDarkMode}
-      className={`fixed bottom-4 left-4 z-50 rounded-md px-4 py-2 border transition
+      onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
+      className={`
+        fixed bottom-4 left-4 z-50 rounded-md px-3 py-1.5 border text-sm font-semibold font-sans transition
         ${
-          darkMode
+          currentTheme === "dark"
             ? "bg-white text-black border-gray-300"
             : "bg-black text-white border-gray-700"
         }
-        hover:ring-2 hover:ring-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500`}
+        hover:ring-2 hover:ring-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500
+      `}
       aria-label="Alternar modo oscuro"
     >
-      {darkMode ? "Desactivar modo oscuro" : "Activar modo oscuro"}
+      {currentTheme === "dark" ? "Desactivar modo oscuro" : "Activar modo oscuro"}
     </button>
   );
 }
-*/

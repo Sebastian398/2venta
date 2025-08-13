@@ -2,9 +2,9 @@
 module.exports = {
   darkMode: "class",
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",      // todas las páginas Next.js
-    "./src/components/**/*.{js,ts,jsx,tsx}", // tus componentes React
-    "./app/**/*.{js,ts,jsx,tsx}",        // si usas carpeta app
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}", // Ajusta aquí si no usas carpeta src
+    "./app/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},

@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 export default function Productos() {
   const [productos, setProductos] = useState([]);
   const [usuarioActivo, setUsuarioActivo] = useState(null);
-  const [expandidos, setExpandidos] = useState({}); 
-  const [mostrarVerMas, setMostrarVerMas] = useState({}); 
+  const [expandidos, setExpandidos] = useState({});
+  const [mostrarVerMas, setMostrarVerMas] = useState({});
   const router = useRouter();
 
   const descripcionRefs = useRef({});
@@ -32,15 +32,13 @@ export default function Productos() {
 
   useEffect(() => {
     const nuevosMostrarVerMas = {};
-
     Object.entries(descripcionRefs.current).forEach(([id, ref]) => {
       if (ref) {
         const lineHeight = parseFloat(getComputedStyle(ref).lineHeight);
-        const maxHeight = lineHeight * 4; 
-        nuevosMostrarVerMas[id] = ref.scrollHeight > maxHeight + 1; 
+        const maxHeight = lineHeight * 4; // 4 líneas
+        nuevosMostrarVerMas[id] = ref.scrollHeight > maxHeight + 1;
       }
     });
-
     setMostrarVerMas(nuevosMostrarVerMas);
   }, [productos, expandidos]);
 
@@ -80,7 +78,6 @@ export default function Productos() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 flex flex-col items-center">
-
       {productos.length === 0 ? (
         <Card>
           <div className="p-6 text-center">
@@ -97,26 +94,28 @@ export default function Productos() {
 
             return (
               <Card key={id} className="w-full max-w-sm">
-                <div className="flex flex-col items-center p-4">
+                <div className="flex flex-col items-center p-4 w-full">
                   {imagen ? (
-                    <div className="w-48 h-48 mb-4 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="w-[192px] h-[192px] mb-4 rounded-lg overflow-hidden flex-shrink-0">
                       <Image
                         src={imagen}
                         alt={nombre}
                         width={192}
                         height={192}
                         className="object-cover w-full h-full"
+                        priority={true}
                       />
                     </div>
                   ) : (
-                    <div className="w-48 h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4 flex-shrink-0">
+                    <div className="w-[192px] h-[192px] bg-gray-200 flex items-center justify-center rounded-lg mb-4 flex-shrink-0">
                       <span className="text-gray-400">Sin imagen</span>
                     </div>
                   )}
+
                   <h2 className="text-lg text-black font-bold mb-2 text-center">{nombre}</h2>
 
                   {descripcion ? (
-                    <div className="mb-4 text-center text-gray-700 relative w-full">
+                    <div className="mb-4 text-center text-gray-700 relative w-full max-w-[400px]">
                       <p
                         ref={(el) => (descripcionRefs.current[id] = el)}
                         style={estaExpandido ? {} : descripcionRestriccion}
@@ -127,9 +126,7 @@ export default function Productos() {
                         <button
                           className="text-teal-600 font-semibold mt-1 underline cursor-pointer bg-transparent border-0 p-0"
                           onClick={() => toggleExpandir(id)}
-                          aria-label={
-                            estaExpandido ? "Ver menos descripción" : "Ver más descripción"
-                          }
+                          aria-label={estaExpandido ? "Ver menos descripción" : "Ver más descripción"}
                         >
                           {estaExpandido ? "Ver menos" : "Ver más"}
                         </button>
