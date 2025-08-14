@@ -31,7 +31,7 @@ export default function DarkModeToggle() {
       `}
       aria-label="Alternar modo oscuro"
     >
-      {currentTheme === "dark" ? "Desactivar modo oscuro" : "Activar modo oscuro"}
+      {currentTheme === "dark" ? "Modo claro" : "Modo oscuro"}
     </button>
   );
 }

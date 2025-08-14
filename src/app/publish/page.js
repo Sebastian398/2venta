@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Card from "../../components/card1";
+import Card from "../../components/card";
 import Validation from "../../components/validation";
 
 export default function PublicarProductoWrapper() {

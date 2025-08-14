@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Card from "../../components/card1";
+import Card from "../../components/card";
 import Button from "../../components/button";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
@@ -79,6 +80,18 @@ export default function Login() {
           <Button type="submit" className="w-full">
             Entrar
           </Button>
+
+          {/* Botón o enlace para recuperar contraseña */}
+          <div className="mt-2 text-center">
+            <Link href="/forgot-password" passHref>
+              <button
+                type="button"
+                className="text-sm text-blue-600 hover:text-blue-800 underline focus:outline-none"
+              >
+                Olvidé mi contraseña
+              </button>
+            </Link>
+          </div>
         </form>
       </Card>
     </div>
