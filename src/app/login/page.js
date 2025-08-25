@@ -81,9 +81,8 @@ export default function Login() {
             Entrar
           </Button>
 
-          {/* Botón o enlace para recuperar contraseña */}
           <div className="mt-2 text-center">
-            <Link href="/forgot-password" passHref>
+            <Link href="/forgot" passHref>
               <button
                 type="button"
                 className="text-sm text-blue-600 hover:text-blue-800 underline focus:outline-none"

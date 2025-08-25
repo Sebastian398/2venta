@@ -60,9 +60,7 @@ export default function Validation({ onValid }) {
 
         const res = await fetch("/api/email", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: formData.email, codigo: generatedCode }),
         });
 
@@ -94,11 +92,6 @@ export default function Validation({ onValid }) {
     if (codigoIngresado === codigoConfirmacion) {
       const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
       const userIndex = usuarios.findIndex((u) => u.email === formData.email);
-
-      if (userIndex !== -1 && usuarios[userIndex].emailConfirmado) {
-        router.push("/login");
-        return;
-      }
 
       if (userIndex !== -1) {
         usuarios[userIndex].emailConfirmado = true;
@@ -147,9 +140,7 @@ export default function Validation({ onValid }) {
                 }`}
                 required
               />
-              {errores.nombreCompleto && (
-                <p className="text-red-600 text-sm mt-1">{errores.nombreCompleto}</p>
-              )}
+              {errores.nombreCompleto && <p className="text-red-600 text-sm mt-1">{errores.nombreCompleto}</p>}
             </label>
 
             <label className="block">
@@ -164,9 +155,7 @@ export default function Validation({ onValid }) {
                 }`}
                 required
               />
-              {errores.documento && (
-                <p className="text-red-600 text-sm mt-1">{errores.documento}</p>
-              )}
+              {errores.documento && <p className="text-red-600 text-sm mt-1">{errores.documento}</p>}
             </label>
 
             <label className="block">
@@ -181,9 +170,7 @@ export default function Validation({ onValid }) {
                 }`}
                 required
               />
-              {errores.telefono && (
-                <p className="text-red-600 text-sm mt-1">{errores.telefono}</p>
-              )}
+              {errores.telefono && <p className="text-red-600 text-sm mt-1">{errores.telefono}</p>}
             </label>
 
             <label className="block">
@@ -198,9 +185,7 @@ export default function Validation({ onValid }) {
                 }`}
                 required
               />
-              {errores.direccion && (
-                <p className="text-red-600 text-sm mt-1">{errores.direccion}</p>
-              )}
+              {errores.direccion && <p className="text-red-600 text-sm mt-1">{errores.direccion}</p>}
             </label>
 
             <label className="block">
@@ -215,9 +200,7 @@ export default function Validation({ onValid }) {
                 }`}
                 required
               />
-              {errores.email && (
-                <p className="text-red-600 text-sm mt-1">{errores.email}</p>
-              )}
+              {errores.email && <p className="text-red-600 text-sm mt-1">{errores.email}</p>}
             </label>
 
             <button

@@ -33,12 +33,27 @@ function PublicarProducto() {
     "Envío internacional",
   ];
 
+  // Categorías usadas
+  const categorias = [
+    "Todas",
+    "Ropa",
+    "Utiles",
+    "Calzado",
+    "Libros",
+    "Electrónica",
+    "Hogar",
+    "Juguetes",
+    "Deportes",
+    "Accesorios",
+  ];
+
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
     precio: "",
     cantidad: "",
     imagen: "",
+    categoria: "",          // <-- Agregado campo categoría aquí
     metodosPago: [],
     metodosEnvio: [],
   });
@@ -104,11 +119,12 @@ function PublicarProducto() {
       !formData.precio ||
       !formData.imagen ||
       !formData.cantidad ||
+      !formData.categoria || // validar categoría seleccionada
       formData.metodosPago.length === 0 ||
       formData.metodosEnvio.length === 0
     ) {
       setMensaje(
-        "Completa nombre, precio, cantidad, añade una imagen y selecciona al menos un método de pago y un método de envío."
+        "Completa nombre, precio, cantidad, añade una imagen, selecciona categoría, al menos un método de pago y un método de envío."
       );
       return;
     }
@@ -123,6 +139,7 @@ function PublicarProducto() {
       precio: parseFloat(formData.precio),
       cantidad: parseInt(formData.cantidad, 10),
       imagen: formData.imagen,
+      categoria: formData.categoria, // guardamos categoría
       metodosPago: formData.metodosPago,
       metodosEnvio: formData.metodosEnvio,
     };
@@ -137,6 +154,7 @@ function PublicarProducto() {
       precio: "",
       cantidad: "",
       imagen: "",
+      categoria: "",
       metodosPago: [],
       metodosEnvio: [],
     });
@@ -176,6 +194,27 @@ function PublicarProducto() {
                 rows={2}
                 placeholder="Detalles importantes del producto (opcional)"
               />
+            </label>
+
+            {/* Categorías (select) */}
+            <label className="block">
+              <span className="font-semibold text-gray-700 mb-1">Categoría *</span>
+              <select
+                name="categoria"
+                value={formData.categoria}
+                onChange={handleChange}
+                required
+                className="w-full border rounded px-3 py-2 text-black"
+              >
+                <option value="" disabled>
+                  Selecciona una categoría
+                </option>
+                {categorias.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </label>
 
             {/* Precio */}
